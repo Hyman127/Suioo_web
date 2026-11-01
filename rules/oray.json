@@ -1,0 +1,21 @@
+{
+  "version": 3,
+  "rules": [
+    {
+      "domain_suffix": [
+        "oray.cn",
+        "oray.com",
+        "oray.com.cn",
+        "oray.link",
+        "oray.net",
+        "oray.net.cn",
+        "oraycdn.com",
+        "orayimg.com",
+        "sunlogin.com",
+        "sunlogin.com.cn",
+        "sunlogin.net",
+        "sunlogin.oray.com"
+      ]
+    }
+  ]
+}

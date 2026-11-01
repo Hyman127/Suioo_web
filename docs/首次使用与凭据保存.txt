@@ -1,0 +1,10 @@
+首次启动：双击启动Suioo.cmd，首次自动安装经固定 SHA-256 验证的官方协议内核，然后打开连接设置。
+输入使用者自己的 Suioo 账号密码；只有认证及 HTTPS 连通性验证成功，才保存本机 DPAPI 加密凭据。
+同一电脑、同一目录后续启动读取 data/connection.dpapi，自动连接，不重复询问。
+错误账号不会替换已验证凭据。网页和公开接口只返回脱敏账号及“密码已保存”状态，不回传密码。
+本机 data 目录限制当前用户、Administrators 和 SYSTEM 访问，配合 LocalMachine DPAPI 支持可选 SYSTEM 后台服务。
+不分享 data 目录，不跨电脑复制 DPAPI 文件，不把配置、运行历史、浏览器资料或发布包中的本机数据上传 GitHub。
+仓库只保留源码、公共规则和使用指引，首次克隆没有任何账号。请完整保留本地 data 目录以便下次免输。
+如果更换账号，在连接设置重新输入并验证即可；不需要手动编辑 CMD 或源码。
+普通双击启动会同时启动当前用户接入守护；后台开机自启动需另运行 Install-Service.cmd。
+开发复验：python -m unittest discover -s tests -v；发布检查：python windows/Check-Publish.py。

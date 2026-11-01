@@ -1,0 +1,13 @@
+#!/bin/sh
+if [ -n "$SUIOO_PYTHON" ]; then
+  exec "$SUIOO_PYTHON" windows/Check-Publish.py
+elif command -v py.exe >/dev/null 2>&1; then
+  exec py.exe -3 windows/Check-Publish.py
+elif command -v python.exe >/dev/null 2>&1; then
+  exec python.exe windows/Check-Publish.py
+elif command -v python3 >/dev/null 2>&1; then
+  exec python3 windows/Check-Publish.py
+else
+  echo 'Python is required to check the publication index.' >&2
+  exit 1
+fi

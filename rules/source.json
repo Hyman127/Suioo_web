@@ -1,0 +1,111 @@
+{
+  "repository": "https://github.com/v2fly/domain-list-community",
+  "commit": "1daade8c4bb957d21d1f5c09c2b050d699e8e96c",
+  "included_source_files": [
+    "alibaba",
+    "alibabacloud",
+    "aligames",
+    "aliyun",
+    "aliyun-drive",
+    "amap",
+    "baidu",
+    "bytedance",
+    "bytedance-ai-!cn",
+    "cainiao",
+    "cnb",
+    "coding",
+    "dingtalk",
+    "discuz",
+    "dnspod",
+    "dola",
+    "dongchedi",
+    "doubao",
+    "douyin",
+    "eleme",
+    "feishu",
+    "fqnovel",
+    "juejin",
+    "kugou",
+    "kuwo",
+    "lark",
+    "lark-global",
+    "qcloud",
+    "shuqi",
+    "sogou",
+    "teambition",
+    "tencent",
+    "tencent-dev",
+    "tencent-games",
+    "tencent-tme",
+    "tiktok",
+    "trae",
+    "uc",
+    "umeng",
+    "volcengine",
+    "webnovel",
+    "ximalaya",
+    "youku",
+    "yuewen"
+  ],
+  "include_attribute_policy": "@!cn overseas; @cn domestic; include attributes filter referenced rows; reviewed service exceptions override ambiguous parent rules",
+  "oray_source": "https://service.oray.com/question/831.html",
+  "sing_box_package_sha256": "sha256:99185d75d314a07dbba4a130c8ad986cbeb629a07927975636b341ca61f991df",
+  "legacy_counts_before_regional_split": {
+    "tencent": {
+      "domain_suffix": 699,
+      "domain": 1
+    },
+    "alibaba": {
+      "domain_suffix": 459,
+      "domain": 5
+    },
+    "bytedance": {
+      "domain_suffix": 927,
+      "domain": 33
+    },
+    "baidu": {
+      "domain_suffix": 132
+    },
+    "oray": {
+      "domain_suffix": 17
+    }
+  },
+  "legacy_total_before_regional_split": 2273,
+  "counts": {
+    "tencent": {
+      "cn": 624,
+      "overseas": 79
+    },
+    "oray": {
+      "cn": 12,
+      "overseas": 5
+    },
+    "bytedance": {
+      "cn": 898,
+      "overseas": 64
+    },
+    "alibaba": {
+      "cn": 423,
+      "overseas": 50
+    },
+    "baidu": {
+      "cn": 131,
+      "overseas": 5
+    }
+  },
+  "total_domain_entries": 2291,
+  "forced_proxy_domains": [
+    "github.com",
+    "githubusercontent.com",
+    "githubassets.com",
+    "github.io",
+    "github.dev",
+    "githubapp.com",
+    "github.blog",
+    "githubstatus.com",
+    "githubcopilot.com",
+    "githubcopilot.dev"
+  ],
+  "regional_policy": "rules/regions.json",
+  "rebuild": "python windows/Build-Regional-Rules.py"
+}

@@ -1,0 +1,1 @@
+{"name":"suioo-terminal-check","publisher":"suioo-local","version":"0.0.1","engines":{"vscode":"^1.85.0"},"main":"extension.js","activationEvents":["onStartupFinished"],"extensionKind":["ui"],"capabilities":{"untrustedWorkspaces":{"supported":true}}}

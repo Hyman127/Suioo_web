@@ -1,0 +1,1535 @@
+[
+  {
+    "domain": "github.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "github"
+  },
+  {
+    "domain": "githubusercontent.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "github"
+  },
+  {
+    "domain": "githubassets.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "github"
+  },
+  {
+    "domain": "github.io",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "github"
+  },
+  {
+    "domain": "github.dev",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "github"
+  },
+  {
+    "domain": "githubapp.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "github"
+  },
+  {
+    "domain": "github.blog",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "github"
+  },
+  {
+    "domain": "githubstatus.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "github"
+  },
+  {
+    "domain": "githubcopilot.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "github"
+  },
+  {
+    "domain": "githubcopilot.dev",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "github"
+  },
+  {
+    "domain": "p16-tiktok-dm-sticker-sign-sg.ibyteimg.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "na-siliconvalley.tencentcos.com.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "roovza-launches.appsflyersdk.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "roovza.launches.appsflyersdk.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "p16-tiktokcdn-com.akamaized.net",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "roovza.skadsdk.appsflyersdk.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "oss-ap-northeast-1.aliyuncs.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "oss-ap-northeast-2.aliyuncs.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "oss-ap-southeast-1.aliyuncs.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "oss-ap-southeast-2.aliyuncs.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "oss-ap-southeast-3.aliyuncs.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "oss-ap-southeast-5.aliyuncs.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "oss-ap-southeast-6.aliyuncs.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "oss-ap-southeast-7.aliyuncs.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "na-siliconvalley.tencentcos.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "roovza.inapps.appsflyersdk.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "console.intl.cloud.tencent.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "tiktokcdn-us.com.edgesuite.net",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "ap-singapore.tencentcos.com.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "eu-frankfurt.tencentcos.com.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "na-siliconvalley.tencentcos.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "oss-eu-central-1.aliyuncs.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "ap-hongkong.tencentcos.com.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "na-siliconvalley.myqcloud.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "sa-saopaulo.tencentcos.com.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "oss-cn-hongkong.aliyuncs.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "ap-bangkok.tencentcos.com.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "ap-jakarta.tencentcos.com.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "na-ashburn.tencentcos.com.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "na-toronto.tencentcos.com.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "account-cn.alibabacloud.com",
+    "mode": "direct",
+    "_managed_region": true,
+    "region": "cn",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "ap-southeast-1.aliyuncs.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "oss-ap-south-1.aliyuncs.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "tiktokcdn.com.akamaized.net",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "tiktokcdn.com.edgesuite.net",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "ap-mumbai.tencentcos.com.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "ap-singapore.tencentcos.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "eu-frankfurt.tencentcos.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "eu-moscow.tencentcos.com.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "oss-eu-west-1.aliyuncs.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "oss-me-east-1.aliyuncs.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "oss-us-east-1.aliyuncs.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "oss-us-west-1.aliyuncs.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "ap-hongkong.tencentcos.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "ap-seoul.tencentcos.com.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "ap-singapore.tencentcos.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "ap-tokyo.tencentcos.com.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "eu-frankfurt.tencentcos.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "sa-saopaulo.tencentcos.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "tiktokv.com.edgesuite.net",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "ap-bangkok.tencentcos.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "ap-hongkong.tencentcos.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "ap-jakarta.tencentcos.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "ap-singapore.myqcloud.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "eu-frankfurt.myqcloud.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "na-ashburn.tencentcos.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "na-toronto.tencentcos.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "sa-saopaulo.tencentcos.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "bytedance.map.fastly.net",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "cn-hongkong.aliyuncs.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "ap-bangkok.tencentcos.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "ap-hongkong.myqcloud.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "ap-jakarta.tencentcos.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "ap-mumbai.tencentcos.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "eu-moscow.tencentcos.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "na-ashburn.tencentcos.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "na-toronto.tencentcos.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "sa-saopaulo.myqcloud.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "lingma.alibabacloud.com",
+    "mode": "direct",
+    "_managed_region": true,
+    "region": "cn",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "status.alibabacloud.com",
+    "mode": "direct",
+    "_managed_region": true,
+    "region": "cn",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "tiktokv.com.edgekey.net",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "ap-bangkok.myqcloud.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "ap-jakarta.myqcloud.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "ap-mumbai.tencentcos.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "ap-seoul.tencentcos.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "ap-tokyo.tencentcos.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "eu-moscow.tencentcos.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "na-ashburn.myqcloud.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "na-toronto.myqcloud.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "intl.cloud.tencent.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "ap-mumbai.myqcloud.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "ap-seoul.tencentcos.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "ap-tokyo.tencentcos.cn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "eu-moscow.myqcloud.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "tiktokglobalshopv.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "ap-seoul.myqcloud.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "ap-tokyo.myqcloud.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "ger.file.myqcloud.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "sgp.file.myqcloud.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "marketing.alibaba.com",
+    "mode": "direct",
+    "_managed_region": true,
+    "region": "cn",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "api.alibabacloud.com",
+    "mode": "direct",
+    "_managed_region": true,
+    "region": "cn",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "aliexpress-media.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "intl.cloud.baidu.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "baidu"
+  },
+  {
+    "domain": "larksuiteimg-boe.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "larksuiteimg-pre.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "analytics.tiktok.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "ca.file.myqcloud.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "hk.file.myqcloud.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "cn.alibabacloud.com",
+    "mode": "direct",
+    "_managed_region": true,
+    "region": "cn",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "dreamina.capcut.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "alibabacloud.com.au",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "alibabacloud.com.hk",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "alibabacloud.com.my",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "alibabacloud.com.sg",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "alibabacloud.com.tw",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "cosger.myqcloud.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "cossgp.myqcloud.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "htrace.wetvinfo.com",
+    "mode": "direct",
+    "_managed_region": true,
+    "region": "cn",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "alibabacloud.co.in",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "cosca.myqcloud.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "coshk.myqcloud.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "intltencentcos.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "larksuite-pre.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "tiktokrow-cdn.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "tiktokstaticb.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "global.baidu.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "baidu"
+  },
+  {
+    "domain": "hkg.baidubce.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "baidu"
+  },
+  {
+    "domain": "larksuitecdn.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "larksuiteimg.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "tencentcloud.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "alibabacloud.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "capcutcdn-us.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "tiktok-minis.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "tiktokcdn-eu.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "tiktokcdn-us.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "tiktokeu-cdn.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "proximabeta.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "byteoversea.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "byteoversea.net",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "ttoverseaus.net",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "aliexpress.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "hkg.bcebos.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "baidu"
+  },
+  {
+    "domain": "bcfmglobal.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "tcfmglobal.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "tik-tokapi.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "tiktok-row.net",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "tiktokminis.us",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "tiktokshop.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "tiktokvapp.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "tencent.com.hk",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "aliexpress.us",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "aliglobal.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "lazada.com.my",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "lazada.com.ph",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "larksuite.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "aeplatform.ru",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "aliexpress.ru",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "youkuplay.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "ciciaicdn.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "ibytedtos.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "tiktokcdn.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "ttlivecdn.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "ttwstatic.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "tencent.co.id",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "lazada.co.id",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "lazada.co.th",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "byteintl.net",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "byteplus.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "gameloop.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "midasbuy.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "aestatic.net",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "alicloud.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "alihealth.hk",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "alipaymo.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "bytedapm.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "ibyteimg.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "marscode.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "ttcdn-us.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "webnovel.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "wetvinfo.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "wetv.qq.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "alibaba.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "oray.com.tw",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "oray"
+  },
+  {
+    "domain": "byteglb.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "tiktokd.net",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "tiktokd.org",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "tiktokv.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "rumt-sg.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "rumt-us.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "lazada.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "duapps.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "baidu"
+  },
+  {
+    "domain": "capcut.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "aweray.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "oray"
+  },
+  {
+    "domain": "aweray.net",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "oray"
+  },
+  {
+    "domain": "awesun.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "oray"
+  },
+  {
+    "domain": "awesun.net",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "oray"
+  },
+  {
+    "domain": "wechat.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "ae-rus.net",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "ciciai.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "muscdn.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "musical.ly",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "tiktok.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "tiktokv.eu",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "tiktokv.us",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "tiktokw.eu",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "tiktokw.us",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "lazada.sg",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "lazada.vn",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "alipay.hk",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "fliggy.hk",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "aedns.ru",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "tmall.hk",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "tmall.ru",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "youku.tv",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "alibaba"
+  },
+  {
+    "domain": "cici.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "coze.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "dola.com",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  },
+  {
+    "domain": "wetv.vip",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "tencent"
+  },
+  {
+    "domain": "trae.ai",
+    "mode": "vpn",
+    "_managed_region": true,
+    "region": "overseas",
+    "vendor": "bytedance"
+  }
+]

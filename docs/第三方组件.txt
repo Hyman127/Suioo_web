@@ -1,0 +1,8 @@
+协议内核：sing-box 1.14.4 Windows AMD64，官方发布未修改二进制。
+源码：https://github.com/SagerNet/sing-box/tree/v1.14.4
+发布：https://github.com/SagerNet/sing-box/releases/tag/v1.14.4
+原始 Windows ZIP SHA256：99185d75d314a07dbba4a130c8ad986cbeb629a07927975636b341ca61f991df
+包含 sing-box.exe、libcronet.dll；许可证见 runtime/engine/LICENSE。
+AnyConnect 用户态协议配置：https://sing-box.sagernet.org/configuration/endpoint/openconnect/
+厂商域名规则：v2fly/domain-list-community；版本和来源见 rules/source.json，许可证见 rules/LICENSE。
+界面、后台会话、代理入口和测速由本项目实现；Windows Job Object 管理模式借鉴用户提供的 MiyaIP 源码。

@@ -1,0 +1,29 @@
+# Private, machine-specific state must never enter Git.
+/runtime/
+/data/
+/config.json
+/evidence/
+.env
+.env.*
+!.env.example
+**/__pycache__/
+*.py[cod]
+*.dpapi
+*.pem
+*.key
+*.pfx
+*.p12
+*.log
+*.sqlite*
+*.zip
+*.download
+*.install
+/connection*.json
+/*credential*
+/*secret*
+/MANIFEST.json
+/SHA256SUMS
+# Existing deployment reports are private operational history.
+/docs/*
+!/docs/第三方组件.txt
+!/docs/首次使用与凭据保存.txt
