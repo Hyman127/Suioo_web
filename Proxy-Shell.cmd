@@ -6,6 +6,7 @@ if errorlevel 1 (
   pause
   exit /b 1
 )
+set "PATH=%LOCALAPPDATA%\Suioo\bin;%PATH%"
 set "HTTP_PROXY=http://127.0.0.1:18790"
 set "HTTPS_PROXY=http://127.0.0.1:18790"
 set "NO_PROXY=localhost,127.0.0.1,::1"

@@ -5,6 +5,7 @@ call "%~dp0start.cmd" --wait-ready --no-browser
 set "SUIOO_READY=%ERRORLEVEL%"
 popd
 if not "%SUIOO_READY%"=="0" exit /b %SUIOO_READY%
+set "PATH=%LOCALAPPDATA%\Suioo\bin;%PATH%"
 set "HTTP_PROXY=http://127.0.0.1:18790"
 set "HTTPS_PROXY=http://127.0.0.1:18790"
 set "NO_PROXY=localhost,127.0.0.1,::1"

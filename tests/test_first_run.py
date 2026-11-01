@@ -14,6 +14,47 @@ import bootstrap
 import launcher
 
 class FirstRunTests(unittest.TestCase):
+    @unittest.skipUnless(sys.platform=='win32','Windows PATH handling')
+    def test_codex_path_preserves_existing_environment_without_registry_writes(self):
+        script=Path(__file__).with_name('Test-CodexInstall.ps1')
+        result=subprocess.run(['powershell.exe','-NoProfile','-ExecutionPolicy','Bypass','-File',str(script)],capture_output=True)
+        self.assertEqual(result.returncode,0,result.stdout.decode(errors='replace')+result.stderr.decode(errors='replace'))
+
+    def test_codex_package_rejects_corrupt_offline_archive(self):
+        import hashlib
+        spec=importlib.util.spec_from_file_location('package_build_codex',Path(__file__).resolve().parents[1]/'windows/Build-Package.py')
+        module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);(root/'windows').mkdir();(root/'vendor').mkdir()
+            (root/'publish-files.json').write_text(json.dumps({'files':['public.py']}))
+            (root/'public.py').write_text('print("public")')
+            body=b'public archive fixture'
+            (root/'windows/codex-release.json').write_text(json.dumps({'archive':'codex.tar.gz','sha256':hashlib.sha256(body).hexdigest()}))
+            archive=root/'vendor/codex.tar.gz';archive.write_bytes(b'corrupt')
+            with self.assertRaisesRegex(ValueError,'Codex archive checksum mismatch'):module.build(root,root/'out',include_codex=True)
+            self.assertFalse((root/'out').exists())
+            archive.write_bytes(body)
+            result=module.build(root,root/'out',include_codex=True)
+            with zipfile.ZipFile(result['file']) as package:
+                self.assertEqual(package.read('Suioo_web/vendor/codex.tar.gz'),body)
+                self.assertTrue(json.loads(package.read('Suioo_web/MANIFEST.json'))['codex_bundled'])
+
+    def test_migration_package_only_contains_public_allowlist(self):
+        spec=importlib.util.spec_from_file_location('package_build',Path(__file__).resolve().parents[1]/'windows/Build-Package.py')
+        module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            (root/'publish-files.json').write_text(json.dumps({'files':['public.py']}))
+            (root/'public.py').write_text('print("public")')
+            for name in ('.git/config','data/connection.dpapi','runtime/uat/private.txt','干净迁移包/old.txt'):
+                target=root/name;target.parent.mkdir(parents=True,exist_ok=True);target.write_text('private-fixture')
+            result=module.build(root,root/'干净迁移包')
+            with zipfile.ZipFile(result['file']) as archive:
+                self.assertEqual(set(archive.namelist()),{'Suioo_web/public.py','Suioo_web/MANIFEST.json','Suioo_web/SHA256SUMS'})
+                self.assertNotIn(b'private-fixture',b''.join(archive.read(n) for n in archive.namelist()))
+            (root/'publish-files.json').write_text(json.dumps({'files':['../outside.py']}))
+            with self.assertRaises(ValueError):module.build(root,root/'output')
+
     def test_occupied_proxy_port_never_starts_another_vpn_login(self):
         import app
         from storage import DEFAULTS

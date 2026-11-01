@@ -8,53 +8,134 @@ function regionDecision(value){let host;try{host=new URL(value.includes('://')?v
  let best=null,score=-1;for(const r of REGION_POLICY.entries){if(host!==r.value&&!(r.kind==='domain_suffix'&&host.endsWith('.'+r.value)))continue;const n=r.value.length*100+(r.kind==='domain'?50:0)+(r.priority||0)*2+(r.region==='overseas'?1:0);if(n>score){score=n;best=r}}
  return best?{group:best.group,region:best.region,mode:best.region==='cn'?'direct':'vpn',rule:best.value}:{group:'other',region:'unknown',mode:'vpn',rule:'未识别站点默认代理'}
 }
-const regionName=r=>({cn:'国内站',overseas:'海外 / 国际站',unknown:'其他站点',custom:'自定义'}[r]||r);
-
-const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const regionName=r=>({cn:'国内',overseas:'海外',unknown:'其他',custom:'自定义'}[r]||r);
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const TOKEN=$('meta[name="api-token"]').content;
-const groups={tencent:'腾讯',oray:'向日葵 / 贝锐',bytedance:'字节',alibaba:'阿里',baidu:'百度',other:'其他',github:'GitHub',custom:'自定义'};
-const modes={system:'当前分流策略',direct:'物理直连',vpn:'Suioo'};
-const states={online:'在线监测',paused:'已暂停',waiting_network:'等待物理网络',confirming_offline:'正在确认掉线',reconnect:'正在请求重连',backoff:'等待下次重连',error:'需要检查'};
-let model=null, initialized=false, selected=new Set(['wechat','sunlogin','douyin','taobao','baidu','google','chatgpt']), busy=false;
+const groups={tencent:'腾讯',oray:'贝锐',bytedance:'字节',alibaba:'阿里',baidu:'百度',other:'其他',github:'GitHub',custom:'自定义'};
+const modes={system:'按规则',direct:'直连',vpn:'代理'};
+let model=null,initialized=false,busy=false,connectionInitialized=false,pendingWindowsConnect=null;
+let selected=new Set(['wechat','sunlogin','douyin','taobao','baidu','google','chatgpt']);
+let catalogOffset=0,catalogData={sites:[],total:0};
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clock=t=>t?new Date(t*1000).toLocaleTimeString('zh-CN',{hour12:false}):'—';
 const ms=x=>Number.isFinite(x)?Math.round(x)+' ms':'—';
 function toast(message){$('#toast').textContent=message;$('#toast').style.display='block';clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('#toast').style.display='none',4500)}
-async function api(path,data){const response=await fetch(path,data?{method:'POST',headers:{'Content-Type':'application/json','X-Suioo-Token':TOKEN},body:JSON.stringify(data)}:{});const value=await response.json();if(!response.ok)throw Error(value.error||'操作失败');return value}
-function navigate(){const id=location.hash.slice(1)||'overview';$$('.view').forEach(e=>e.classList.toggle('hidden',e.id!==id));$$('nav a').forEach(e=>e.classList.toggle('active',e.hash==='#'+id));const link=$(`nav a[href="#${id}"] span`);$('#pageTitle').textContent=link?link.textContent:'连接总览'}
-window.addEventListener('hashchange',navigate);navigate();
+async function api(path,data){
+ const response=await fetch(path,data?{method:'POST',headers:{'Content-Type':'application/json','X-Suioo-Token':TOKEN},body:JSON.stringify(data)}:{});
+ const value=await response.json();if(!response.ok)throw Error(value.error||'操作失败');return value;
+}
+function navigate(){
+ const requested=location.hash.slice(1)||'overview',id=['overview','connection','speed','rules','guard','events'].includes(requested)?requested:'overview';
+ $$('.view').forEach(e=>e.classList.toggle('hidden',e.id!==id));
+ $$('nav a').forEach(e=>{const active=e.hash==='#'+id;e.classList.toggle('active',active);if(active)e.setAttribute('aria-current','page');else e.removeAttribute('aria-current')});
+ $('#pageTitle').textContent=$(`nav a[href="#${id}"] span`).textContent;window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',navigate);
 function latestResults(){const latest=new Map;for(const row of model.probes){if(row.site_id.startsWith('_'))continue;const key=row.site_id+'|'+row.mode;if(!latest.has(key))latest.set(key,row)}return [...latest.values()].sort((a,b)=>b.time-a.time)}
-function renderResults(){if(!model)return;const filter=$('#resultFilter').value.toLowerCase(),mode=$('#modeFilter').value;const rows=latestResults().filter(r=>(!mode||r.mode===mode)&&JSON.stringify(r).toLowerCase().includes(filter));$('#resultRows').innerHTML=rows.length?rows.map(r=>`<tr><td>${esc(r.name)}<small>${esc(modes[r.mode])} · ${esc(groups[r.group])}</small></td><td><span class="pill ${r.page_ok?'good':r.transport_ok?'warn':'bad'}">${r.http_status?'HTTP '+esc(r.http_status):'未建立连接'}</span></td><td>${ms(r.dns_ms)}</td><td>${ms(r.tcp_ms)}</td><td>${ms(r.tls_ms)}</td><td>${ms(r.ttfb_ms)}</td><td>${ms(r.total_ms)}</td><td class="error-cell">${esc(r.local_ip||r.interface||'')}<small>${esc(r.error||r.note||r.remote_ip||'')}</small></td></tr>`).join(''):'<tr><td colspan="8" class="muted">还没有匹配的测量结果。选择网站和出口后开始测速。</td></tr>'}
-function renderChart(){const rows=latestResults().filter(r=>r.transport_ok&&Number.isFinite(r.total_ms)).slice(0,8);const max=Math.max(1,...rows.map(r=>r.total_ms));$('#overviewChart').classList.toggle('empty',!rows.length);$('#overviewChart').innerHTML=rows.length?rows.map(r=>`<div class="bar-row"><span>${esc(r.name)}<small class="muted"> · ${esc(modes[r.mode])}</small></span><div class="track"><div class="fill" style="width:${Math.max(1,r.total_ms/max*100).toFixed(2)}%"></div></div><span>${Math.round(r.total_ms)} ms</span></div>`).join(''):'运行一次网站测速，查看真实测量结果';const hearts=model.probes.filter(r=>r.site_id==='_heartbeat').slice(0,60).reverse();$('#heartbeatChart').innerHTML=hearts.map(r=>`<span class="heart ${r.transport_ok?'':'bad'}" title="${esc(clock(r.time))} · ${r.transport_ok?'连接正常':'探测失败'}"></span>`).join('');$('#heartbeatText').textContent=hearts.length?`最近 ${hearts.length} 次保活，${hearts.filter(r=>r.transport_ok).length} 次收到服务器响应。失败记录不会触发强制断开在线隧道。`:'守护每 15 秒发送一次轻量 HTTPS 保活，收到样本后在这里显示。'}
-function renderConfig(){const cfg=model.config;$('#groupCards').innerHTML=Object.entries(REGION_POLICY.counts).map(([g,n])=>`<div class="group-card"><b>${esc(groups[g])}</b><span>国内 ${n.cn} 条 → 直连</span><span>海外 ${n.overseas} 条 → Suioo 代理</span></div>`).join('')+'<div class="group-card"><b>GitHub</b><span>网站 / API / 源码 / 下载固定代理</span><span>Git HTTPS / SSH 已配置专用代理</span></div>';$('#defaultMode').value='vpn';$('#defaultMode').disabled=true;$('#saveGroups').disabled=true;$('#saveGroups').textContent='固定分流策略';$('#proxyEnabled').checked=cfg.proxy_enabled;$('#guardEnabled').checked=cfg.guard_enabled;$('#keepAwake').checked=cfg.keep_awake;$('#customRules').innerHTML=(cfg.custom_rules||[]).map((r,i)=>r._managed_region?'':`<div class="event-row"><span>${esc(r.domain)}</span><span>${esc(modes[r.mode])}</span></div>`).join('')||'<p class="muted">当前使用国内 / 海外服务规则及 GitHub 强制代理规则。</p>';$('#customForm').querySelectorAll('input,select,button').forEach(e=>e.disabled=true);$('#siteChecks').innerHTML=cfg.sites.map(s=>{const d=regionDecision(s.url);return `<label><input type="checkbox" data-site="${esc(s.id)}" ${selected.has(s.id)?'checked':''}>${esc(s.name)}<small> · ${esc(regionName(d.region))} → ${esc(modes[d.mode])}</small></label>`}).join('')}
-
-function render(){const {vpn,physical,guard,proxy,config:cfg,job}=model;$('#projectPath').textContent=model.project;$('#lastUpdate').textContent='更新于 '+clock(model.time);$('#footerClock').textContent=new Date().toLocaleString('zh-CN');$('#vpnStatus').textContent=(model.core.ready??model.core.running)&&model.core.health?.page_ok?'通道已验证':model.core.running?'内核运行 · 待验证':'代理未就绪';$('#vpnStatus').style.color=vpn?'#168677':'#ba7165';$('#vpnDetail').textContent=vpn?vpn.ips.join(', ')+' · '+vpn.name:'守护将按断线策略检查';$('#physicalName').textContent=physical?.name||'未连接';$('#physicalDetail').textContent=physical?.ips?.join(', ')||'等待可用的物理网卡';$('#proxyAddress').textContent=proxy.running?'127.0.0.1:'+proxy.port:'入口未启动';$('#proxyDetail').textContent=proxy.error|| (cfg.proxy_enabled?'仅供显式接入的应用使用':'本地代理已暂停接入');$('#guardStatus').textContent=guard.stale?'未收到守护心跳':states[guard.state]||guard.state||'未安装守护';renderConnection();renderIntegration();$('#guardDetail').textContent=guard.time?'最近检查 '+clock(guard.time):'运行安装守护.cmd以启用';$('#guardStateBig').textContent=$('#guardStatus').textContent;$('#guardBadge').textContent=guard.stale?'等待守护':'监测中';$('#guardAttempts').textContent=guard.attempts??0;$('#guardNext').textContent=guard.next_attempt>model.time?Math.ceil(guard.next_attempt-model.time)+' 秒后':'按需检查';$('#guardHeartbeat').textContent=guard.heartbeat?clock(guard.heartbeat.time):'等待样本';$('#reconnectDetail').textContent=model.reconnect.message?clock(model.reconnect.time)+'\n'+model.reconnect.message:'尚无重连结果。在线时不会主动重连。';$('#defaultFlow').textContent=modes[cfg.default_mode];$('#proxyCopy').textContent='HTTP / HTTPS 代理：127.0.0.1:'+cfg.proxy_port;$('#probeProgress').textContent=job.total?`${job.done} / ${job.total}${job.running?' · 测速中':' · 已完成'}`:'';$('#progressBar').style.width=(job.total?job.done/job.total*100:0)+'%';$('#runProbe').disabled=job.running;$('#quickProbe').disabled=job.running;$('#eventRows').innerHTML=model.events.map(r=>`<div class="event-row"><time>${esc(new Date(r.time*1000).toLocaleString('zh-CN'))}</time><code>${esc(r.kind)}</code><span>${esc(r.kind==='proxy'?r.message.replace(/ → (direct|vpn|system)$/,' · 已建立代理入口连接'):r.message)}</span></div>`).join('')||'<p class="muted">尚无运行记录。</p>';if(!initialized){renderConfig();initialized=true}renderResults();renderChart()}
-async function refresh(){if(busy)return;busy=true;try{model=await api('/api/state');render()}catch(e){$('#lastUpdate').textContent='控制台暂不可达';toast(e.message)}finally{busy=false}}
+function renderResults(){
+ const filter=$('#resultFilter').value.toLowerCase(),mode=$('#modeFilter').value;
+ const rows=latestResults().filter(r=>(!mode||r.mode===mode)&&JSON.stringify(r).toLowerCase().includes(filter));
+ const opened=new Set($$('#resultRows details[open]').map(e=>e.dataset.result));
+ $('#resultRows').innerHTML=rows.length?rows.map(r=>{
+  const status=r.page_ok?'可访问':r.transport_ok?'访问受限':'未连接';
+  const route=r.outbound==='direct'?'直连':r.outbound==='suioo'?'代理':modes[r.mode];
+  const key=r.site_id+'|'+r.mode,routeLabel=route===modes[r.mode]?route:route+' · '+modes[r.mode];
+  return `<tr><td>${esc(r.name)}<small>${esc(routeLabel)}</small></td><td><span class="pill ${r.page_ok?'good':r.transport_ok?'warn':'bad'}">${status}</span></td><td>${r.transport_ok?ms(r.total_ms):'—'}</td><td><details class="result-details" data-result="${esc(key)}" ${opened.has(key)?'open':''}><summary>展开</summary><p>${r.http_status?'HTTP '+esc(r.http_status)+' · ':''}${esc(clock(r.time))}</p><p>DNS ${ms(r.dns_ms)} · TCP ${ms(r.tcp_ms)}<br>TLS ${ms(r.tls_ms)} · 首字节 ${ms(r.ttfb_ms)}</p><p>${esc(r.error||r.note||r.remote_ip||'')}</p></details></td></tr>`;
+ }).join(''):'<tr><td colspan="4"><div class="empty">暂无测速结果</div></td></tr>';
+}
+function renderChart(){
+ const rows=latestResults().filter(r=>r.transport_ok&&Number.isFinite(r.total_ms)).slice(0,6),max=Math.max(1,...rows.map(r=>r.total_ms));
+ $('#overviewChart').classList.toggle('empty',!rows.length);
+ $('#overviewChart').innerHTML=rows.length?rows.map(r=>`<div class="bar-row"><span>${esc(r.name)}</span><div class="track"><div class="fill" style="width:${Math.max(1,r.total_ms/max*100).toFixed(2)}%"></div></div><span>${ms(r.total_ms)}</span></div>`).join(''):'暂无测速结果';
+ const hearts=model.probes.filter(r=>r.site_id==='_heartbeat').slice(0,60).reverse();
+ $('#heartbeatChart').innerHTML=hearts.map(r=>`<span class="heart ${r.transport_ok?'':'bad'}" title="${esc(clock(r.time))} · ${r.transport_ok?'正常':'未连接'}"></span>`).join('');
+ $('#heartbeatText').textContent=hearts.length?`最近 ${hearts.length} 次检查，${hearts.filter(r=>r.transport_ok).length} 次响应`:'暂无检查记录';
+}
+function renderConfig(){
+ const cfg=model.config;
+ $('#groupCards').innerHTML=Object.entries(REGION_POLICY.counts).map(([g,n])=>`<div class="group-card"><b>${esc(groups[g])}</b><span>国内直连<em>${n.cn}</em></span><span>海外代理<em>${n.overseas}</em></span></div>`).join('')+'<div class="group-card"><b>GitHub</b><span>全部使用代理</span><span>网站 · 源码 · 下载</span></div>';
+ $('#defaultMode').value='vpn';$('#saveGroups').disabled=true;$('#proxyEnabled').checked=cfg.proxy_enabled;
+ $('#guardEnabled').checked=cfg.guard_enabled;$('#keepAwake').checked=cfg.keep_awake;
+ $('#customRules').innerHTML=(cfg.custom_rules||[]).filter(r=>!r._managed_region).map(r=>`<div class="catalog-row"><span>${esc(r.domain)}</span><span>${esc(modes[r.mode])}</span></div>`).join('');
+ $('#customForm').querySelectorAll('input,select,button').forEach(e=>e.disabled=true);
+ $('#siteChecks').innerHTML=cfg.sites.map(s=>`<label><input type="checkbox" data-site="${esc(s.id)}" ${selected.has(s.id)?'checked':''}>${esc(s.name)}</label>`).join('');
+}
+function renderConnection(){
+ const c=model.connection,k=model.core,saved=c.username_saved&&c.password_saved;
+ if(pendingWindowsConnect){
+  if((k.error&&!k.applying&&Date.now()-pendingWindowsConnect.started>2000)||Date.now()-pendingWindowsConnect.started>120000){pendingWindowsConnect=null;toast('连接未成功')}
+  else if(k.ready&&!k.applying&&k.pid!==pendingWindowsConnect.pid){pendingWindowsConnect=null;api('/api/integration',{enabled:true}).then(()=>toast('已连接')).catch(e=>toast(e.message))}
+ }
+ $('#coreBadge').textContent=k.applying?'连接中':k.ready?'已连接':'未连接';
+ $('#credentialStatus').textContent=saved?`${c.username_masked} · 已保存`:'未保存账号';
+ $('#connectionMessage').textContent=k.error&&!k.applying?'连接失败，详情见连接日志':'';
+ $('#connectButton').disabled=k.applying;$('#connectButton').textContent=k.applying?'连接中…':k.ready?'更新连接':'连接';
+ $('#applyCore').hidden=!saved||k.ready;$('#applyCore').disabled=k.applying;
+ $('#stopCore').hidden=!k.running&&!k.applying;
+ $('#connectionDetails').textContent=`${c.backend} · 127.0.0.1:${model.config.proxy_port} · DPD ${c.dpd_interval} · 重连窗口 ${c.reconnect_timeout}`;
+ $('#sessionDetails').textContent=`进程 ${k.pid||'—'} · 当前连接 ${k.active_connections||0}`;
+ $('#coreLogs').textContent=(k.error?k.error+'\n\n':'')+((k.logs||[]).join('\n')||'暂无日志');
+ if(!connectionInitialized){$('#connectionForm [name="server"]').value=c.server;$('#connectionForm [name="no_udp"]').checked=c.no_udp;connectionInitialized=true}
+ $('#connectionForm [name="username"]').placeholder=saved?'保留已保存账号':'Suioo 账号';
+ $('#connectionForm [name="password"]').placeholder=saved?'保留已保存密码':'Suioo 密码';
+}
+function renderIntegration(){
+ const i=model.integration||{},active=i.browser_proxy_active&&i.new_terminals_configured;
+ $('#integrationBadge').textContent=active?'已接入':i.enabled?'等待连接':'未接入';
+ $('#integrationDetail').textContent=`浏览器 ${i.browser_proxy_active?'已接入':'未接入'} · 新终端 ${i.new_terminals_configured?'已接入':'未接入'}`;
+ $('#enableIntegration').disabled=!model.core.ready||active;$('#disableIntegration').disabled=!i.enabled&&!i.browser_proxy_active;
+}
+function render(){
+ const {physical,guard,proxy,config:cfg,job,core}=model,online=core.ready&&core.health?.page_ok;
+ $('#projectPath').textContent=model.project;$('#lastUpdate').textContent=clock(model.time);$('#footerClock').textContent=new Date().toLocaleDateString('zh-CN');
+ $('#vpnStatus').textContent=online?'已连接':core.applying?'连接中':'未连接';$('#vpnStatus').style.color=online?'#288d75':'#8a969d';
+ $('#sideStatus').textContent=online?'连接正常':core.applying?'连接中':'尚未连接';
+ $('#vpnDetail').innerHTML=online?'Suioo':`<a class="text-link" href="#connection">连接设置 →</a>`;
+ $('#physicalName').textContent=physical?.name||'检测中';$('#physicalDetail').textContent=physical?.ips?.join(', ')||'';
+ $('#proxyAddress').textContent=proxy.running?'127.0.0.1:'+cfg.proxy_port:'未启动';$('#proxyDetail').textContent=proxy.running?(cfg.proxy_enabled?(online?'可用':'等待连接'):'已暂停'):'';
+ const paused=cfg.guard_pause_until>model.time,guardState=!cfg.guard_enabled?'已关闭':paused?'已暂停':online?'运行中':'等待连接';
+ $('#guardStatus').textContent=guardState;$('#guardDetail').textContent=paused?Math.ceil((cfg.guard_pause_until-model.time)/60)+' 分钟后恢复':online?'断线自动重连':'';
+ $('#guardStateBig').textContent=guardState;$('#guardBadge').textContent=guardState;
+ $('#guardAttempts').textContent=guard.attempts??0;$('#guardNext').textContent=guard.next_attempt>model.time?Math.ceil(guard.next_attempt-model.time)+' 秒后':'按需检查';
+ $('#guardHeartbeat').textContent=guard.heartbeat?clock(guard.heartbeat.time):'—';$('#reconnectDetail').textContent=model.reconnect.message||'暂无记录';
+ $('#defaultFlow').textContent='代理';$('#proxyCopy').textContent='HTTP / HTTPS · 127.0.0.1:'+cfg.proxy_port;
+ $('#probeProgress').textContent=job.total?`${job.done} / ${job.total} · ${job.running?'测试中':'已完成'}`:'';
+ $('#progressBar').style.width=(job.total?job.done/job.total*100:0)+'%';$('#runProbe').disabled=job.running;$('#quickProbe').disabled=job.running;
+ $('#eventRows').innerHTML=model.events.map(r=>`<div class="event-row"><time>${esc(new Date(r.time*1000).toLocaleString('zh-CN'))}</time><span>${esc(r.kind==='proxy'?r.message.replace(/ → direct$/,' · 直连').replace(/ → vpn$/,' · 代理'):r.message)}</span></div>`).join('')||'<div class="empty">暂无活动</div>';
+ if(!initialized){renderConfig();initialized=true}renderConnection();renderIntegration();renderResults();renderChart();
+}
+async function refresh(){if(busy)return;busy=true;try{model=await api('/api/state');render()}catch(e){$('#lastUpdate').textContent='连接中断';toast(e.message)}finally{busy=false}}
 async function execute(fn){try{await fn();await refresh()}catch(e){toast(e.message)}}
 $('#refresh').onclick=refresh;$('#resultFilter').oninput=renderResults;$('#modeFilter').onchange=renderResults;
 $('#siteChecks').addEventListener('change',e=>{if(e.target.dataset.site){if(e.target.checked)selected.add(e.target.dataset.site);else selected.delete(e.target.dataset.site)}});
-async function runProbe(quick=false){await api('/api/probe',{site_ids:quick?['wechat','sunlogin','douyin','taobao','baidu','google','chatgpt']:[...selected],modes:quick?['system']:$$('input[name="mode"]:checked').map(x=>x.value)});toast('测速已开始，每次最多并发两条连接');location.hash='speed'}
+async function runProbe(quick=false){
+ const ids=quick?['wechat','sunlogin','douyin','taobao','baidu','google','chatgpt']:[...selected];
+ const routes=quick?['system']:$$('input[name="mode"]:checked').map(x=>x.value);
+ if(!ids.length)throw Error('请选择网站');if(!routes.length)throw Error('请选择测试方式');
+ await api('/api/probe',{site_ids:ids,modes:routes});toast('测速已开始');location.hash='speed';
+}
 $('#runProbe').onclick=()=>execute(()=>runProbe());$('#quickProbe').onclick=()=>execute(()=>runProbe(true));
-$('#saveGroups').onclick=()=>execute(async()=>{const cfg={};$$('[data-group]').forEach(x=>cfg[x.dataset.group]=x.value);await api('/api/config',{groups:cfg,default_mode:$('#defaultMode').value,proxy_enabled:$('#proxyEnabled').checked});toast('规则已保存，请到连接设置点击启动 / 应用配置')});
-$('#ruleForm').onsubmit=e=>{e.preventDefault();try{const r=regionDecision(new FormData(e.target).get('host'));$('#ruleAnswer').textContent=`匹配：${groups[r.group]||'自定义'} · ${regionName(r.region)} → ${modes[r.mode]}，规则：${r.rule}`}catch(error){toast(error.message)}};
-$('#customForm').onsubmit=e=>{e.preventDefault();execute(async()=>{const form=new FormData(e.target);await api('/api/config',{custom_rules:[{domain:form.get('domain'),mode:form.get('mode')},...model.config.custom_rules]});initialized=false;e.target.reset();toast('已添加域名规则')})};
-$('#customRules').onclick=e=>{if(e.target.dataset.deleteRule!==undefined)execute(async()=>{const rows=model.config.custom_rules.filter((r,i)=>i!==Number(e.target.dataset.deleteRule));await api('/api/config',{custom_rules:rows});initialized=false})};
-$('#siteForm').onsubmit=e=>{e.preventDefault();execute(async()=>{const f=new FormData(e.target),id='site-'+Date.now();await api('/api/config',{sites:[...model.config.sites,{id,name:f.get('name'),url:f.get('url'),group:f.get('group')}]});selected.add(id);initialized=false;e.target.reset();toast('网站已添加')})};
-for(const [id,action] of [['guardCheck','check'],['guardPause','pause'],['guardResume','resume']])$('#'+id).onclick=()=>execute(async()=>{await api('/api/guard',{action});toast(action==='check'?'已请求检查；在线时保持连接':'守护设置已更新')});
-$('#saveGuard').onclick=()=>execute(async()=>{await api('/api/config',{guard_enabled:$('#guardEnabled').checked,keep_awake:$('#keepAwake').checked});toast('守护设置已保存')});
-refresh();setInterval(refresh,2500);
-
-let connectionInitialized=false,pendingWindowsConnect=null;
-function renderConnection(){const c=model.connection,k=model.core;if(pendingWindowsConnect){if((k.error&&!k.applying&&Date.now()-pendingWindowsConnect.started>2000)||Date.now()-pendingWindowsConnect.started>120000){pendingWindowsConnect=null;toast(k.error||'连接验证未完成，请检查内核日志')}else if(k.ready&&!k.applying&&k.pid!==pendingWindowsConnect.pid){pendingWindowsConnect=null;api('/api/integration',{enabled:true}).then(()=>toast('账号验证通过，正在接入 Windows 浏览器和新终端')).catch(e=>toast(e.message))}}$('#coreBadge').textContent=k.applying?'正在认证 / 验证':k.running?'内核运行':'等待启动';$('#credentialStatus').textContent=`已保存账号：${c.username_masked||'无'} · 密码${c.password_saved?'已加密保存':'未设置'}`;$('#connectionDetails').textContent=`${c.backend}；HTTP / HTTPS 代理 127.0.0.1:${model.config.proxy_port}；DPD ${c.dpd_interval}；协议重连窗口 ${c.reconnect_timeout}；系统网卡接管：关闭。`;$('#sessionDetails').textContent=`PID ${k.pid||'—'} · 活跃连接 ${k.active_connections} · 等待释放的旧会话 ${k.draining_sessions}`;$('#coreLogs').textContent=(k.error?k.error+'\n\n':'')+(k.logs.join('\n')||'尚无内核日志');$('#applyCore').disabled=k.applying||k.ready;$('#applyCore').title=k.ready?'通道在线，保留当前会话；分流规则使用文件热更新':'';if(!connectionInitialized){$('#connectionForm [name="server"]').value=c.server;$('#connectionForm [name="no_udp"]').checked=c.no_udp;connectionInitialized=true}}
-$('#connectionForm').onsubmit=e=>{e.preventDefault();execute(async()=>{const f=new FormData(e.target);await api('/api/connection',{server:f.get('server'),username:f.get('username'),password:f.get('password'),no_udp:f.has('no_udp'),connect_windows:f.has('connect_windows')});if(f.has('connect_windows'))pendingWindowsConnect={pid:model.core.pid,started:Date.now()};e.target.elements.username.value='';e.target.elements.password.value='';toast('正在验证 Suioo 账号与 HTTPS 连通性，成功后自动保存并连接')})};
-$('#applyCore').onclick=()=>execute(async()=>{await api('/api/core',{action:'apply'});toast('正在建立并验证新会话')});
-$('#stopCore').onclick=()=>execute(async()=>{await api('/api/core',{action:'stop'});toast('本项目代理已停止')});
+$('#ruleForm').onsubmit=e=>{e.preventDefault();try{const r=regionDecision(new FormData(e.target).get('host'));$('#ruleAnswer').innerHTML=`<span class="pill ${r.mode==='direct'?'direct':'vpn'}">${esc(modes[r.mode])}</span><span>${esc(groups[r.group]||'其他')} · ${esc(regionName(r.region))}</span><small>${esc(r.rule)}</small>`}catch(error){toast(error.message)}};
+$('#siteForm').onsubmit=e=>{e.preventDefault();execute(async()=>{const f=new FormData(e.target),id='site-'+Date.now();await api('/api/config',{sites:[...model.config.sites,{id,name:f.get('name'),url:f.get('url'),group:f.get('group')}]});selected.add(id);initialized=false;e.target.reset();toast('已添加')})};
+for(const [id,action] of [['guardCheck','check'],['guardPause','pause'],['guardResume','resume']])$('#'+id).onclick=()=>execute(async()=>{await api('/api/guard',{action});toast(action==='check'?'已检查':action==='pause'?'已暂停':'已恢复')});
+$('#saveGuard').onclick=()=>execute(async()=>{await api('/api/config',{guard_enabled:$('#guardEnabled').checked,keep_awake:$('#keepAwake').checked});toast('已保存')});
+$('#connectionForm').onsubmit=e=>{e.preventDefault();execute(async()=>{const f=new FormData(e.target);await api('/api/connection',{server:f.get('server'),username:f.get('username'),password:f.get('password'),no_udp:f.has('no_udp'),connect_windows:f.has('connect_windows')});if(f.has('connect_windows'))pendingWindowsConnect={pid:model.core.pid,started:Date.now()};e.target.elements.username.value='';e.target.elements.password.value='';toast('正在连接')})};
+$('#applyCore').onclick=()=>execute(async()=>{await api('/api/core',{action:'apply'});toast('正在连接')});
+$('#stopCore').onclick=()=>execute(async()=>{await api('/api/core',{action:'stop'});toast('已断开')});
 $('#previewConfig').onclick=()=>execute(async()=>{$('#configPreview').textContent=JSON.stringify(await api('/api/config-preview'),null,2)});
-
-let catalogOffset=0,catalogData={sites:[],total:0};
-async function loadCatalog(){try{catalogData=await api('/api/catalog?'+new URLSearchParams({offset:catalogOffset,q:$('#catalogSearch').value,group:$('#catalogGroup').value}));$('#catalogCount').textContent=`${catalogOffset+1}–${catalogOffset+catalogData.sites.length} / ${catalogData.total}`;$('#catalogRows').innerHTML=catalogData.sites.map(s=>`<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.name)}<small> · ${esc(regionName(regionDecision(s.url).region))} → ${esc(modes[regionDecision(s.url).mode])}</small></a>`).join('');$('#catalogPrev').disabled=catalogOffset===0;$('#catalogNext').disabled=catalogOffset+40>=catalogData.total}catch(e){toast(e.message)}}
-$('#catalogSearch').oninput=()=>{clearTimeout(loadCatalog.timer);loadCatalog.timer=setTimeout(()=>{catalogOffset=0;loadCatalog()},300)};$('#catalogGroup').onchange=()=>{catalogOffset=0;loadCatalog()};$('#catalogPrev').onclick=()=>{catalogOffset=Math.max(0,catalogOffset-40);loadCatalog()};$('#catalogNext').onclick=()=>{catalogOffset+=40;loadCatalog()};$('#catalogProbe').onclick=()=>execute(async()=>{await api('/api/probe',{site_ids:catalogData.sites.map(s=>s.id),modes:['system']});location.hash='speed';toast('目录当前页已开始测速')});loadCatalog();
-
-function renderIntegration(){const i=model.integration||{};$('#integrationBadge').textContent=i.stale?'等待用户接入守护':i.browser_proxy_active?'浏览器已接入':i.enabled?'等待健康通道':'使用原设置';$('#integrationDetail').textContent=i.error||`用户代理：${i.browser_proxy_active?'已接入':'未接入'} · 新终端配置：${i.new_terminals_configured?'已就绪':'未接入'} · 自动故障回退已安装`;}
-$('#enableIntegration').onclick=()=>execute(async()=>{await api('/api/integration',{enabled:true});toast('正在接入 Windows 浏览器和新终端，请等待状态更新')});
-$('#disableIntegration').onclick=()=>execute(async()=>{await api('/api/integration',{enabled:false});toast('正在恢复原用户代理和终端设置')});
+$('#enableIntegration').onclick=()=>execute(async()=>{await api('/api/integration',{enabled:true});toast('正在接入')});
+$('#disableIntegration').onclick=()=>execute(async()=>{await api('/api/integration',{enabled:false});toast('已恢复原设置')});
+async function loadCatalog(){
+ try{
+  catalogData=await api('/api/catalog?'+new URLSearchParams({offset:catalogOffset,q:$('#catalogSearch').value,group:$('#catalogGroup').value}));
+  $('#catalogCount').textContent=catalogData.total?`${catalogOffset+1}–${catalogOffset+catalogData.sites.length} / ${catalogData.total}`:'无匹配域名';
+  $('#catalogRows').innerHTML=catalogData.sites.map(s=>{const r=regionDecision(s.url);return `<a class="catalog-row" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer"><span>${esc(s.name)}</span><span class="pill ${r.mode==='direct'?'direct':'vpn'}">${esc(modes[r.mode])}</span></a>`}).join('');
+  $('#catalogPrev').disabled=catalogOffset===0;$('#catalogNext').disabled=catalogOffset+40>=catalogData.total;$('#catalogProbe').disabled=!catalogData.sites.length;
+ }catch(e){toast(e.message)}
+}
+$('#catalogDetails').addEventListener('toggle',()=>{if($('#catalogDetails').open&&!catalogData.total)loadCatalog()});
+$('#catalogSearch').oninput=()=>{clearTimeout(loadCatalog.timer);loadCatalog.timer=setTimeout(()=>{catalogOffset=0;loadCatalog()},300)};
+$('#catalogGroup').onchange=()=>{catalogOffset=0;loadCatalog()};
+$('#catalogPrev').onclick=()=>{catalogOffset=Math.max(0,catalogOffset-40);loadCatalog()};$('#catalogNext').onclick=()=>{catalogOffset+=40;loadCatalog()};
+$('#catalogProbe').onclick=()=>execute(async()=>{await api('/api/probe',{site_ids:catalogData.sites.map(s=>s.id),modes:['system']});location.hash='speed';toast('测速已开始')});
+navigate();refresh();setInterval(refresh,2500);

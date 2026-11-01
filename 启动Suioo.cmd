@@ -2,6 +2,9 @@
 setlocal
 cd /d "%~dp0"
 chcp 65001 >nul
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0windows\Install-Codex.ps1" -Quiet
+if errorlevel 1 exit /b 1
+set "PATH=%LOCALAPPDATA%\Suioo\bin;%PATH%"
 set "SUIOO_PY="
 if exist "%~dp0runtime\python\python.exe" set "SUIOO_PY=%~dp0runtime\python\python.exe"
 if not defined SUIOO_PY if exist "C:\PythonDev\python\python\python.exe" set "SUIOO_PY=C:\PythonDev\python\python\python.exe"

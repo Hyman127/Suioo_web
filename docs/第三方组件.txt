@@ -6,3 +6,5 @@
 AnyConnect 用户态协议配置：https://sing-box.sagernet.org/configuration/endpoint/openconnect/
 厂商域名规则：v2fly/domain-list-community；版本和来源见 rules/source.json，许可证见 rules/LICENSE。
 界面、后台会话、代理入口和测速由本项目实现；Windows Job Object 管理模式借鉴用户提供的 MiyaIP 源码。
+
+Codex CLI：OpenAI 官方 0.166.0 Windows x64，未修改二进制；源码及发布 https://github.com/openai/codex/tree/rust-v0.166.0 。固定摘要和下载地址见 windows/codex-release.json，Apache-2.0 许可证见 vendor/CODEX-LICENSE.txt。

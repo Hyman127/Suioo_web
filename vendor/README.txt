@@ -6,3 +6,8 @@ The download cache (*.zip) and extracted runtime/engine are ignored by Git.
 Source: https://github.com/SagerNet/sing-box/tree/v1.14.4
 Engine license: GPL-3.0-or-later; original notice is installed as runtime/engine/LICENSE.
 No Suioo account is included or sent when downloading the engine.
+
+Optional offline Codex: OpenAI Codex CLI 0.166.0 Windows x64, unmodified official executable.
+Source and archive/executable SHA-256 pins: windows/codex-release.json
+License: Apache-2.0; see vendor/CODEX-LICENSE.txt.
+Build with --include-codex to include the public archive; no account or auth state is packaged.

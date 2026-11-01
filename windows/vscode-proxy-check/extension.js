@@ -3,7 +3,7 @@ exports.activate=function(context){
  const root=path.resolve(context.extensionPath,'../..'),work=path.join(root,'runtime','vscode-network-check');
  if(vscode.env.remoteName||!(vscode.workspace.workspaceFolders||[]).some(f=>path.resolve(f.uri.fsPath).toLowerCase()===work.toLowerCase()))return;
  const quote=s=>"'"+s.replace(/'/g,"''")+"'";
- const py=fs.existsSync(path.join(root,'runtime','python','python.exe'))?path.join(root,'runtime','python','python.exe'):'C:\\PythonDev\\python\\python\\python.exe';
+ const py=fs.existsSync(path.join(root,'runtime','python','python.exe'))?path.join(root,'runtime','python','python.exe'):'python.exe';
  const output=path.join(work,'powershell-codex-version.txt');
  const terminal=vscode.window.createTerminal({name:'Suioo VS Code network verification',cwd:work});
  terminal.show(true);
