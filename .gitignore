@@ -2,6 +2,7 @@
 /runtime/
 /data/
 /config.json
+/Suioo.md
 /evidence/
 .env
 .env.*
@@ -16,6 +17,7 @@
 *.log
 *.sqlite*
 *.zip
+/vendor/codex-*.tar.gz
 *.download
 *.install
 /connection*.json

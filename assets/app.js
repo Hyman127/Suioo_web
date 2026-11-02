@@ -16,6 +16,7 @@ const modes={system:'按规则',direct:'直连',vpn:'代理'};
 let model=null,initialized=false,busy=false,connectionInitialized=false,pendingWindowsConnect=null;
 let selected=new Set(['wechat','sunlogin','douyin','taobao','baidu','google','chatgpt']);
 let catalogOffset=0,catalogData={sites:[],total:0};
+let resultsSignature=null;
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clock=t=>t?new Date(t*1000).toLocaleTimeString('zh-CN',{hour12:false}):'—';
 const ms=x=>Number.isFinite(x)?Math.round(x)+' ms':'—';
@@ -35,6 +36,7 @@ function latestResults(){const latest=new Map;for(const row of model.probes){if(
 function renderResults(){
  const filter=$('#resultFilter').value.toLowerCase(),mode=$('#modeFilter').value;
  const rows=latestResults().filter(r=>(!mode||r.mode===mode)&&JSON.stringify(r).toLowerCase().includes(filter));
+ const signature=JSON.stringify(rows);if(signature===resultsSignature)return;
  const opened=new Set($$('#resultRows details[open]').map(e=>e.dataset.result));
  $('#resultRows').innerHTML=rows.length?rows.map(r=>{
   const status=r.page_ok?'可访问':r.transport_ok?'访问受限':'未连接';
@@ -42,6 +44,7 @@ function renderResults(){
   const key=r.site_id+'|'+r.mode,routeLabel=route===modes[r.mode]?route:route+' · '+modes[r.mode];
   return `<tr><td>${esc(r.name)}<small>${esc(routeLabel)}</small></td><td><span class="pill ${r.page_ok?'good':r.transport_ok?'warn':'bad'}">${status}</span></td><td>${r.transport_ok?ms(r.total_ms):'—'}</td><td><details class="result-details" data-result="${esc(key)}" ${opened.has(key)?'open':''}><summary>展开</summary><p>${r.http_status?'HTTP '+esc(r.http_status)+' · ':''}${esc(clock(r.time))}</p><p>DNS ${ms(r.dns_ms)} · TCP ${ms(r.tcp_ms)}<br>TLS ${ms(r.tls_ms)} · 首字节 ${ms(r.ttfb_ms)}</p><p>${esc(r.error||r.note||r.remote_ip||'')}</p></details></td></tr>`;
  }).join(''):'<tr><td colspan="4"><div class="empty">暂无测速结果</div></td></tr>';
+ resultsSignature=signature;
 }
 function renderChart(){
  const rows=latestResults().filter(r=>r.transport_ok&&Number.isFinite(r.total_ms)).slice(0,6),max=Math.max(1,...rows.map(r=>r.total_ms));

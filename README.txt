@@ -5,7 +5,7 @@ Windows 本地代理面板，提供 Suioo AnyConnect 接入、国内 / 海外域
 ## 首次使用
 
 1. 在 Windows 10 / 11 x64 安装 Python 3.12 或更新版本，并勾选 **Add Python to PATH**。
-2. 克隆仓库或下载 ZIP 并完整解压，然后双击 **`启动Suioo.cmd`**。支持中文及含空格的项目路径。启动时自动安装 Codex 到当前用户目录并配置 PATH，无需管理员权限或 Node.js；离线迁移包已内置 Codex。
+2. 克隆仓库或下载 ZIP 并完整解压，然后双击 **`启动Suioo.cmd`**。支持中文及含空格的项目路径。面板启动后自动安装 Codex 及配套 Code Mode Host 到当前用户目录并配置 PATH，无需管理员权限或 Node.js；离线迁移包已内置 Codex。
 3. 首次启动会从 sing-box 官方 GitHub Release 下载固定版本的协议内核，核验 SHA-256 后解压到本地 `runtime/engine`。首次下载需要能访问 GitHub；后续启动复用本地内核。
 4. 浏览器会自动进入“连接”页。输入**你自己的 Suioo 接入账号和密码**，点击“连接”。默认接入地址为 `https://node.anyconnect.cloud`，可在“更多设置”中修改。
 5. 账号验证和连通性检查通过后，凭据才会以 Windows DPAPI 加密保存到本机 `data/connection.dpapi`。**以后在同一台电脑、同一项目目录启动时自动读取，无需重复输入。**
@@ -41,7 +41,9 @@ python windows/Check-Publish.py
 
 目标机运行面板需 Python 3.12 或更新版本；仅运行 Codex 不需要 Python、Node.js 或 VS Code。完整解压后双击 `打开CMD.cmd`，输入 `codex` 即可启动；在项目目录直接运行 `codex` 也会自动安装。`启动Suioo.cmd` 和 `安装Codex.cmd` 同样会安装 Codex 并配置当前用户 PATH，之后从开始菜单新开的 CMD 可在任意目录运行 `codex`。已打开的 CMD 或 VS Code 保留旧环境，应关闭后重新打开，或使用 `打开CMD.cmd`。安装位置为 `%LOCALAPPDATA%/Suioo`，项目移动后全局命令仍可用。
 
-离线包通过 `--include-codex` 附带官方固定版本压缩包，安装前校验压缩包及可执行文件 SHA-256；源码未带压缩包时从官方 Release 下载。运行 `codex --version` 可检查安装；运行 `codex` 首次需自行登录。命令安装和启动不依赖 Suioo 连接成功，登录及模型请求需要可用网络。VS Code 单独安装；代理接入在面板中启用。迁移包不含 Codex 登录状态。
+面板先启动，再检查 Codex 组件；安装失败会单独提示并返回错误码，已启动的面板仍可用于检查连接。`安装Codex.cmd` 可独立重试。
+
+离线包通过 `--include-codex` 同时附带 Codex 主程序与 Code Mode Host 的官方固定版本压缩包，安装前校验压缩包及可执行文件 SHA-256；源码未带压缩包时从官方 Release 下载。运行 `codex --version` 可检查安装；运行 `codex` 首次需自行登录。命令安装和启动不依赖 Suioo 连接成功，登录及模型请求需要可用网络。VS Code 单独安装；代理接入在面板中启用。迁移包不含 Codex 登录状态。
 
 代理核心的来源、固定摘要和许可证见 [vendor/README.txt](vendor/README.txt) 和 [docs/第三方组件.txt](docs/第三方组件.txt)。域名规则来源及许可证保存在 `rules/`。
 

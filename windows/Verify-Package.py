@@ -28,13 +28,18 @@ with zipfile.ZipFile(path) as archive:
     codex_release=json.loads(archive.read('Suioo_web/windows/codex-release.json'))
     if codex_release!=json.loads((root/'windows/codex-release.json').read_text(encoding='utf-8')):
         errors.append('Codex release pin differs from verifier')
-    codex_bundled='vendor/'+codex_release['archive']
-    optional={bundled,codex_bundled}
+    codex_components=[codex_release,*codex_release.get('components',[])]
+    codex_archives={'vendor/'+component['archive'] for component in codex_components}
+    optional={bundled}|codex_archives
     if declared-optional!=allowed or declared-allowed-optional:errors.append('Archive differs from public file allowlist')
     if bool(manifest.get('engine_bundled'))!=(bundled in declared):errors.append('Engine bundle flag mismatch')
-    if bool(manifest.get('codex_bundled'))!=(codex_bundled in declared):errors.append('Codex bundle flag mismatch')
-    if codex_bundled in declared and hashlib.sha256(archive.read('Suioo_web/'+codex_bundled)).hexdigest()!=codex_release['sha256']:
-        errors.append('Bundled Codex checksum mismatch')
+    present_codex=declared&codex_archives
+    expected_codex=codex_archives if manifest.get('codex_bundled') else set()
+    if present_codex!=expected_codex:errors.append('Codex bundle flag or component membership mismatch')
+    for component in codex_components:
+        name='vendor/'+component['archive']
+        if name in declared and hashlib.sha256(archive.read('Suioo_web/'+name)).hexdigest()!=component['sha256']:
+            errors.append('Bundled Codex checksum mismatch: '+name)
     if bundled in declared and hashlib.sha256(archive.read('Suioo_web/'+bundled)).hexdigest()!=ENGINE_SHA256:
         errors.append('Bundled engine checksum mismatch')
     expected={'Suioo_web/'+row['path'] for row in manifest['files']}|{'Suioo_web/MANIFEST.json','Suioo_web/SHA256SUMS'}

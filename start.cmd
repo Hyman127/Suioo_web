@@ -2,8 +2,6 @@
 setlocal
 cd /d "%~dp0"
 chcp 65001 >nul
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0windows\Install-Codex.ps1" -Quiet
-if errorlevel 1 exit /b 1
 set "PATH=%LOCALAPPDATA%\Suioo\bin;%PATH%"
 set "SUIOO_PY="
 if exist "%~dp0runtime\python\python.exe" set "SUIOO_PY=%~dp0runtime\python\python.exe"
@@ -21,6 +19,15 @@ if defined SUIOO_PY (
 set "SUIOO_EXIT=%ERRORLEVEL%"
 if not "%SUIOO_EXIT%"=="0" (
   echo Startup failed. See runtime\server.log and runtime\startup-error.txt
+  if "%~1"=="" pause
+)
+if not "%SUIOO_EXIT%"=="0" (
+  endlocal & exit /b %SUIOO_EXIT%
+)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0windows\Install-Codex.ps1" -Quiet
+set "SUIOO_EXIT=%ERRORLEVEL%"
+if not "%SUIOO_EXIT%"=="0" (
+  echo Suioo panel started, but Codex installation failed. Retry with 安装Codex.cmd after checking network access.
   if "%~1"=="" pause
 )
 endlocal & exit /b %SUIOO_EXIT%

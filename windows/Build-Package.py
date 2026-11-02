@@ -34,10 +34,14 @@ def build(root, output_dir, include_engine=False, include_codex=False):
         payload['vendor/' + ENGINE_ARCHIVE] = body
     if include_codex:
         release = json.loads((root / 'windows/codex-release.json').read_text(encoding='utf-8'))
-        body = (root / 'vendor' / release['archive']).read_bytes()
-        if hashlib.sha256(body).hexdigest() != release['sha256']:
-            raise ValueError('Codex archive checksum mismatch')
-        payload['vendor/' + release['archive']] = body
+        for component in [release, *release.get('components', [])]:
+            name = component['archive']
+            if not name or Path(name).name != name or '/' in name or '\\' in name or ':' in name:
+                raise ValueError('Unsafe Codex archive path')
+            body = (root / 'vendor' / name).read_bytes()
+            if hashlib.sha256(body).hexdigest() != component['sha256']:
+                raise ValueError('Codex archive checksum mismatch: ' + name)
+            payload['vendor/' + name] = body
     rows = [{'path': name, 'bytes': len(body), 'sha256': hashlib.sha256(body).hexdigest()}
             for name, body in sorted(payload.items())]
     payload['MANIFEST.json'] = json.dumps({'created': time.time(), 'files': rows,

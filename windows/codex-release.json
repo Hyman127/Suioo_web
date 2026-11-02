@@ -4,5 +4,15 @@
   "member": "codex-x86_64-pc-windows-msvc.exe",
   "url": "https://github.com/openai/codex/releases/download/rust-v0.166.0/codex-x86_64-pc-windows-msvc.exe.tar.gz",
   "sha256": "dafeb48b5a853b2898453a6b5bdae0fa0646bd5d5b73c5dfe74c97d0af4a4a0d",
-  "exe_sha256": "9d563ee4e0441ff9d59d612013e0460ddf8e5709735c2d9f6b98b7ef8ca4eb42"
+  "exe_sha256": "9d563ee4e0441ff9d59d612013e0460ddf8e5709735c2d9f6b98b7ef8ca4eb42",
+  "components": [
+    {
+      "target": "codex-code-mode-host.exe",
+      "archive": "codex-code-mode-host-windows-x64.tar.gz",
+      "member": "codex-code-mode-host-x86_64-pc-windows-msvc.exe",
+      "url": "https://github.com/openai/codex/releases/download/rust-v0.166.0/codex-code-mode-host-x86_64-pc-windows-msvc.exe.tar.gz",
+      "sha256": "91ddc4847c18d364e641fbce4a0f50b747935b1d5548d9ebb4b2242a8cd09b96",
+      "exe_sha256": "977c1f01c9efac0bfe1b9032717c95f92e1c965c8441a8dacbfe824c5c79a527"
+    }
+  ]
 }

@@ -39,6 +39,82 @@ class FirstRunTests(unittest.TestCase):
                 self.assertEqual(package.read('Suioo_web/vendor/codex.tar.gz'),body)
                 self.assertTrue(json.loads(package.read('Suioo_web/MANIFEST.json'))['codex_bundled'])
 
+    def test_codex_package_requires_verified_companion_components(self):
+        import hashlib
+        spec=importlib.util.spec_from_file_location('package_build_components',Path(__file__).resolve().parents[1]/'windows/Build-Package.py')
+        module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);(root/'windows').mkdir();(root/'vendor').mkdir()
+            (root/'publish-files.json').write_text(json.dumps({'files':['public.py']}))
+            (root/'public.py').write_text('print("public")')
+            components=[]
+            for name,body in [('codex.tar.gz',b'primary fixture'),('host.tar.gz',b'companion fixture')]:
+                (root/'vendor'/name).write_bytes(body)
+                components.append({'archive':name,'sha256':hashlib.sha256(body).hexdigest()})
+            release=dict(components[0],components=components[1:])
+            (root/'windows/codex-release.json').write_text(json.dumps(release))
+            host=root/'vendor/host.tar.gz';original=host.read_bytes();host.write_bytes(b'corrupt companion')
+            with self.assertRaisesRegex(ValueError,'checksum mismatch: host'):module.build(root,root/'out',include_codex=True)
+            self.assertFalse((root/'out').exists())
+            host.unlink()
+            with self.assertRaises(FileNotFoundError):module.build(root,root/'out',include_codex=True)
+            host.write_bytes(original)
+            result=module.build(root,root/'out',include_codex=True)
+            with zipfile.ZipFile(result['file']) as package:
+                self.assertEqual(package.read('Suioo_web/vendor/host.tar.gz'),original)
+                self.assertEqual(package.read('Suioo_web/vendor/codex.tar.gz'),b'primary fixture')
+
+    def test_package_verifier_checks_all_codex_components(self):
+        import hashlib
+        project=Path(__file__).resolve().parents[1]
+        spec=importlib.util.spec_from_file_location('package_build_verify',project/'windows/Build-Package.py')
+        module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);(root/'windows').mkdir();(root/'vendor').mkdir()
+            for name in ['bootstrap.py','windows/Verify-Package.py']:
+                (root/name).write_bytes((project/name).read_bytes())
+            files=['publish-files.json','windows/codex-release.json','bootstrap.py','windows/Verify-Package.py']
+            (root/'publish-files.json').write_text(json.dumps({'files':files}))
+            components=[]
+            for name,body in [('codex.tar.gz',b'primary fixture'),('host.tar.gz',b'companion fixture')]:
+                (root/'vendor'/name).write_bytes(body)
+                components.append({'archive':name,'sha256':hashlib.sha256(body).hexdigest()})
+            (root/'windows/codex-release.json').write_text(json.dumps(dict(components[0],components=components[1:])))
+
+            def verify(path):
+                result=subprocess.run([sys.executable,str(root/'windows/Verify-Package.py'),str(path)],capture_output=True)
+                self.assertIn(result.returncode,(0,1),result.stderr.decode(errors='replace'))
+                return json.loads(result.stdout)
+
+            source=module.build(root,root/'source')
+            self.assertTrue(verify(source['file'])['passed'])
+            bundled=module.build(root,root/'bundled',include_codex=True)
+            self.assertTrue(verify(bundled['file'])['passed'])
+            with zipfile.ZipFile(bundled['file']) as archive:
+                original={name:archive.read(name) for name in archive.namelist()}
+            prefix='Suioo_web/'
+            for scenario in ['missing','corrupt','false_flag']:
+                with self.subTest(scenario=scenario):
+                    payload=dict(original);manifest=json.loads(payload[prefix+'MANIFEST.json'])
+                    if scenario=='missing':
+                        del payload[prefix+'vendor/host.tar.gz']
+                        manifest['files']=[row for row in manifest['files'] if row['path']!='vendor/host.tar.gz']
+                    elif scenario=='corrupt':
+                        body=b'tampered companion';payload[prefix+'vendor/host.tar.gz']=body
+                        for row in manifest['files']:
+                            if row['path']=='vendor/host.tar.gz':
+                                row.update(bytes=len(body),sha256=hashlib.sha256(body).hexdigest())
+                    else:
+                        manifest['codex_bundled']=False
+                    payload[prefix+'MANIFEST.json']=json.dumps(manifest).encode()
+                    payload[prefix+'SHA256SUMS']=''.join(row['sha256']+'  '+row['path']+'\n' for row in manifest['files']).encode()
+                    path=root/(scenario+'.zip')
+                    with zipfile.ZipFile(path,'w') as archive:
+                        for name,body in payload.items():archive.writestr(name,body)
+                    report=verify(path)
+                    self.assertFalse(report['passed'])
+                    self.assertTrue(any('Codex' in error for error in report['errors']),report)
+
     def test_migration_package_only_contains_public_allowlist(self):
         spec=importlib.util.spec_from_file_location('package_build',Path(__file__).resolve().parents[1]/'windows/Build-Package.py')
         module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
