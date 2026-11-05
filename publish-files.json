@@ -128,6 +128,9 @@
     "安装Codex.cmd",
     "打开CMD.cmd",
     "一键诊断.cmd",
-    "一键修复.cmd"
+    "一键修复.cmd",
+    "windows/Start-Portable.ps1",
+    "tests/test_codex_diagnostics.py",
+    "tests/test_portable_start.py"
   ]
 }

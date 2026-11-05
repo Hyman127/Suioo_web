@@ -2,6 +2,20 @@
 
 Windows 本地代理面板，提供 Suioo AnyConnect 接入、国内 / 海外域名分流、网站耗时展示和后台保活。使用用户态协议内核，无需 OpenConnect GUI。
 
+## 虚拟机与便携 Python
+
+离线迁移后先校验包的 SHA256，不复制其他电脑的 DPAPI、账号或 Codex 登录缓存。Python 不在 PATH 时，可运行：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File windows/Start-Portable.ps1 -PythonExecutable C:\工具\python.exe -NoBrowser -NoIntegration
+```
+
+该入口只等待启动器退出，后台服务持续运行；避免外层用 `Start-Process -Wait` 等待整个服务进程树。`-NoIntegration` 保留已有 Windows 用户代理设置。正常桌面启动仍使用原来的 `启动Suioo.cmd`。
+
+运行 `python -B diagnostics.py --codex --no-open` 可另查 Codex 安装、登录状态及 OpenAI 认证页、ChatGPT、API 的代理连通性。PATH 尚未刷新时也识别 Suioo 用户安装目录；不会登录、发送模型请求或导出账号及原始日志。
+
+Google 204 或通道 ready 不代表 OpenAI 可用。登录页403/429与未带密钥的API401分别报告；401不是模型响应通过。当前会话的 CSTP `0xb0 Internal Error` 是服务端断开信号，不能靠清空认证掩盖，也不保证切换 TCP-only 就能解决。网络专项通过后，仍需目标用户完成 Codex 官方登录并做简单短答验证。
+
 ## 首次使用
 
 1. 在 Windows 10 / 11 x64 安装 Python 3.12 或更新版本，并勾选 **Add Python to PATH**。

@@ -4,6 +4,7 @@ import concurrent.futures
 import hashlib
 import json
 import os
+import shutil
 from pathlib import Path
 import re
 import subprocess
@@ -257,7 +258,66 @@ def classify(report):
     return findings
 
 
-def collect(app, quick=False):
+CODEX_ENDPOINTS = (
+    ('codex_auth_proxy', 'https://auth.openai.com/'),
+    ('codex_chatgpt_proxy', 'https://chatgpt.com/'),
+    ('codex_api_proxy', 'https://api.openai.com/v1/models'),
+)
+
+
+def codex_runtime(environ=None):
+    """Only return version/login categories; never export paths or account output."""
+    environ = os.environ if environ is None else environ
+    candidates = []
+    if environ.get('LOCALAPPDATA'):
+        candidates.append(('suioo_user_install', Path(environ['LOCALAPPDATA']) / 'Suioo/Codex/0.166.0/codex.exe'))
+    if environ.get('USERPROFILE'):
+        candidates.append(('managed_install', Path(environ['USERPROFILE']) / '.codex/packages/app-server-daemon/current/bin/codex.exe'))
+    found = shutil.which('codex', path=environ.get('PATH', ''))
+    if found:
+        candidates.append(('path', Path(found)))
+    selected = next(((kind, exe) for kind, exe in candidates if exe.is_file()), None)
+    if not selected:
+        return {'found': False, 'login': 'not_checked'}
+    kind, exe = selected
+    result = {'found': True, 'source': kind, 'login': 'unknown', 'version': None}
+    try:
+        version = subprocess.run([str(exe), '--version'], capture_output=True, timeout=8, creationflags=FLAGS)
+        match = re.search(r'\b(\d+\.\d+\.\d+)\b', version.stdout.decode('utf-8', 'replace'))
+        result['version'] = match.group(1) if match else None
+        login = subprocess.run([str(exe), 'login', 'status'], capture_output=True, timeout=8, creationflags=FLAGS)
+        text = (login.stdout + login.stderr).decode('utf-8', 'replace').lower()
+        result['login'] = 'logged_in' if login.returncode == 0 else 'not_logged_in' if 'not logged in' in text else 'unknown'
+    except (OSError, subprocess.TimeoutExpired):
+        result['probe_failed'] = True
+    return result
+
+
+def codex_findings(report):
+    if not report.get('codex_requested'):
+        return []
+    checks = {r['name']: r for r in report.get('checks', [])}
+    findings = []
+    def add(code, message):
+        findings.append({'code': code, 'message': message})
+    if any(name not in checks or checks[name].get('exit') != 0 or checks[name].get('connect_status', 0) not in (0, 200) for name, _ in CODEX_ENDPOINTS):
+        add('CODEX_TRANSPORT_FAILED', '通道保活不代表Codex可用；OpenAI专项连接未通过，不自动改账号或重发模型输入。')
+    else:
+        if any(not 200 <= checks[name].get('status', 0) < 400 for name in ('codex_auth_proxy', 'codex_chatgpt_proxy')):
+            add('CODEX_LOGIN_PAGE_RESTRICTED', 'Codex登录网页受限；需核对浏览器挑战、限流或节点访问，不能当作登录成功。')
+        if checks['codex_api_proxy'].get('status') == 401:
+            add('CODEX_API_AUTH_REQUIRED', '未带密钥的API401仅证明网络和认证要求，不是模型回复通过。')
+        elif checks['codex_api_proxy'].get('status') != 200:
+            add('CODEX_API_RESTRICTED', 'OpenAI API返回受限或异常状态，尚不能确认模型可用。')
+    runtime = report.get('codex_runtime', {})
+    if not runtime.get('found'):
+        add('CODEX_NOT_INSTALLED', '未找到Codex；请先运行安装Codex.cmd。')
+    elif runtime.get('login') == 'not_logged_in':
+        add('CODEX_LOGIN_REQUIRED', 'Codex尚未登录；Suioo接入账号不等于Codex账号，需用户在目标电脑完成官方登录。')
+    return findings
+
+
+def collect(app, quick=False, codex=False):
     print('检查本地面板、代理和 Windows 设置...', flush=True)
     try:
         initial = app.state()
@@ -286,6 +346,10 @@ def collect(app, quick=False):
         ('google_204_proxy_http1', 'https://www.google.com/generate_204', True, True, True),
         ('google_204_direct_reference', 'https://www.google.com/generate_204', False, True, False),
     ]
+    if codex:
+        jobs += [(name, url, True, True, False) for name, url in CODEX_ENDPOINTS]
+        report['codex_requested'] = True
+        report['codex_runtime'] = codex_runtime()
     print('对比国内直连、Google 首页和静态资源，观察隧道约 18 秒...', flush=True)
     with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
         observation = pool.submit(sample, app, 0 if quick else 18)
@@ -296,7 +360,7 @@ def collect(app, quick=False):
         report['samples'] = observation.result()
         report['windows'] = network.result()
         report['system_dns'] = [f.result() for f in dns]
-    report['findings'] = classify(report)
+    report['findings'] = classify(report) + codex_findings(report)
     return report
 
 
@@ -413,10 +477,11 @@ def save_report(report, root=ROOT):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--repair', action='store_true')
+    parser.add_argument('--codex', action='store_true', help='另查Codex安装/登录及OpenAI连通性，不发送模型请求')
     parser.add_argument('--no-open', action='store_true')
     args = parser.parse_args()
     app = LocalApp()
-    report = collect(app)
+    report = collect(app, codex=args.codex)
     if args.repair:
         print('根据诊断结果处理本项目接入设置...', flush=True)
         try:
@@ -425,7 +490,7 @@ def main():
             report['repair_actions'] = [{'code': 'REPAIR_FAILED', 'message': '自动修复未确认完成，已保留诊断结果；本机可能需要检查写入权限。'}]
         if any(a['code'] in ('INTEGRATION_REAPPLIED', 'STALE_PROXY_RESTORED', 'INTEGRATION_NOT_CONFIRMED', 'REPAIR_FAILED') for a in report['repair_actions']):
             before = report
-            report = collect(app)
+            report = collect(app, codex=args.codex)
             report['repair_actions'] = before['repair_actions']
             report['before_repair'] = {'findings': before['findings'], 'windows': before['windows']}
     destination = save_report(report)
